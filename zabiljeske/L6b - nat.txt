@@ -1,0 +1,74 @@
+network address translation 
+
+staticki, dinamicki, pat
+
+staticki nat - prevodjenje adresa 1 prema 1, 1 privatna adresa u 1 javnu, scenario zelimo da dozvolimo pristup nekom nasem serveru koji ima privatnu adresu s vana, tu privantu adresu prevedemo u javnu i damo je kome treba
+
+server je nat-transparentan, ne zna da ce njegova adresa da bude prepisana
+
+natovanje se radi na ruteru, tj sva konfiguracija
+
+2 nacina, npr [internet -- r1 -- sv1 -- server] 
+1. mozemo serversku adresu zamijeniti sa nekom adresom iz mreze [internet -- r1 ]
+2. zamijenimo bilo kojom adresom, ali je bitno da ruteri znaju doci do njega
+
+inside -- outside adrese
+
+staticko rutiranje u jednoj komandi
+
+r1(config)# ip nat inside source static 172.16.16.1 64.100.50.1
+
+dodatno, mora se podesiti na ruteru svi interfejsi koji ucestvuju u natovanju, oni na koje dolaze privatne adrese i one na koje izlaze javne, inside i outside interfejs,
+
+r1(config)#int g0/0
+r1(config-if)#nat inside
+r1(config)#int s0/0/0
+r1(config-if)#nat outside
+
+sad se pinga javna adresa, a ne privatna
+
+kad nat poruka [TESTIRATI koja tacno poruka] dodje do rutera koji vrsi natovanje, destination ip se mijenja, inbound je javna, 64.x.x.x a outbound je 172.x.x.x
+
+kad server salje odgovor, onda se mijenja source ip adresa
+
+r1#show ip nat translations -- prikaz natovanja
+
+
+
+dinamicki nat
+ovdje se vise adresa prevodi u vise adresa, problem ako ja [TESTIRATI ruter valjda] imam 5 javnih adresa, onda mogu natirati samo 5 racunara iz mreze 
+
+ruter za natovanje je ruter koji je granica javnog i privatnog opsega 
+
+prvo se definisu privatne adrese, pa javne, pa se ta dva skupa povezu
+
+standardna kontrol lista -- jednostavan zapis kojim se obuhvataju sve adrese sumarno, access lista
+r2(config)# access-list 1 permit 172.16.0.0 [wildcard maska - 0.0.255.255] -- konfigurisanje access liste jedan
+
+sad se obuhvataju javne adrese -- 
+r2(config)# ip nat pool nazivPoola prvaAdresa zadnjaAdresa netmaska adresaMaske
+r2(config)# ip nat pool POOL 209.165.200.229 209.165.200.230 netmask  255.255.255.224 -- ovjde imaju dvije javne adrese, .29 i .30
+
+povezivanje access liste i poola --
+r2(config)# ip nat inside source list 1 pool POOL 
+
+u primjeru, 3 racunara i 2 javne adrese, kada se prva dva racunara povezu na internet, treci nece moci izaci na internet 
+
+po dinamickom natu moze se izvesti onoliko racunara koliko ima slobodnih (javnih) adresa
+
+
+
+verzija nata, PAT, izvodjenje vise racunara preko cak jedne adrese 
+Port Address translation
+pat se naziva i Dinamicki NAT sa Overload-om
+
+ralika u odnosu na dinamicki nat:
+r1(config)# ip nat inside source list 1 pool ANY_POOL_NAME overload -- govori ruteru da ubaci portove u pricu, da preko tih portova prepozna odgovor, i preko tih portova izabere kojem hostu ce proslijediti odgovor
+
+ako se privatne adrese mapiraju u jednu javnu, tj javnu adresu rutera, onda ne treba pool izlaznih adresa, vec samo access lista privatnih i komanda: 
+r2(config)#ip nat inside source list 2 interface s0/1/1 overload 
+
+port nije kao obicni port vec vise je identifikator po kojem ce ruter razlikovati kome treba poslati odgovor 
+
+
+

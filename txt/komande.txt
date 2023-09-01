@@ -1,0 +1,147 @@
+---------------A1spanningTree
+
+
+---------------A6BGP
+
+
+---------------L1stp
+#show spanning-tree ( u privilegovanom modu)
+#spanning-tree vlan 1 priority [ manji od postojeceg]
+#spanning-tree vlan 1 root primary -- automatski bira prioritet i postaje root bridge
+#spanning-tree 1 root secondary -- zamjenik root bridga
+# komanda na interfejsu
+# spanning-tre portfast 
+# spanning-tre portfast 
+# spanning-tree bpduguard enable -- ako se na ovom portu ikad prikaze BPDU poruka (a nju salje samo svic, nikad racunar), onda ce taj port automatski ugasiti (bolje ugasen nego petlja) 
+    #show spanning-tree
+    u sw4 # spanning-tree vlan 1 port-priority [k*16]
+
+
+---------------L2VLAN
+wsitch#show vlan brief 
+(config) #vlan 10
+(config-vlan) #name Studenti
+(config) #vlan 20
+(config-vlan) #name Profesori
+config # int fasteternet 0/3
+switch(cofnig-int)#switchport mode access
+switch(cofnig-int)#switchport access vlan 10 -- ovo podesava koji je vlan na tom interfejsu [TESTIRATI ima li komanda switchport trunk vlan 10]
+switch(cofnig-int)# 
+SW(config)# interface range f0/1-2
+SW(config-if-range)# switchport mode trunk
+ruter(cofnig-in)#no shutdown  
+ruter(config)# interface g0/0.brojPodinterfejsa{dobra praksa broj vlana, ne mora} --ovo ulazi u mod subinterfejsa
+ruter(config-subinf)# encapsulation dot1Q 10 {ovaj broj mora se podudarati sa brojem vlana}
+ruter(config-subinf)#ip address 192.168.10.254 255,255,255,0 -- ovo je defaultni gejtvej za racunare sa vlana 10
+
+
+---------------L3etherchanelWanWlan
+switch(config)# int range fa0/1-2
+switch(config-if-range)#channel-group [broj etherchanela] mode [5 opcija, on znaci da linkovi bezuslovno odu u etherchanel]
+switch#show etherchannel summary -- komanda za verifikaciju etherchanela
+r1(config-if)# encapsulation ppp
+R1(config)# username [R2 - ovdje ide hostname rutera sa kojim se treba izvrsiti autentikacija, ruter sa druge strane]  password lozinka
+R2(config)#username R1 password lozinka
+#int s0/0/1 ; #ppp authentication chap [TESTIRATI sta je chap]
+
+
+---------------L4portSecurity
+sw1(config)# int range fo/1-2
+sw1(config-if-range)#       [TESTIRATI sta fali ovjde]
+sw1(config-if-range)# switchport port-security
+postavljanje max 1 mak adrese za dati port -- sw1(config-if-range)# switchport port-security maximum 1 [1 je def]
+komanda koja omogucava svicu da dinamicki nauci mak adresu na portu i da je stavi u radnu konfiguraciju, nakon restartovanja svica on ce na odredjenom portu dozvoliti samo tu mak adresu --sw1(config-if-range)# switchport port-security mac-address sticky
+sw1(config-if-range)#  switchport port-security violation [protect - bez informacija, restrict - kod ove imaju neke informacije,shutdown - def]
+s1#show port security int f0/2 -- ovo je za ispis 
+ako je na portu ukljucen violation shutdown, i on se poveze na ispravni host sa mac adresom iz konfiguracije, mora se izvrsiti intervencija, tad je port u error-disabled, zbog ovog stanja mora prvo #shutdown pa onda #no shutdown
+
+
+---------------L4RIP
+R1(config)# router [konfiguracija za neki od protokola rutiranja ]
+        #router rip
+r1 (config-router)# network [direktno povezane mreze-oglasava dir pov mreze, te aktivira interfejse da aktivno ucestvuju u slanju i primanji routing-update poruka ]
+kod ripa se uvijek u komandi #network [adresa] uvijek unosi klasna adresa [npr 172.16.0.0]
+R1(config-router)# version 2
+R1(config-router)#no auto-summary
+komanda R1(config-router)#passive-interface fa0/0
+
+
+---------------L4ssh
+1. spreciti ios da razrijesi pogresno unesene komande -- r1(config)#no ip domain-lookup
+r1(config)#security passwords min-length 10
+r1(config)#exec-timeout 7 -- ako smo neaktivni ovoliko minuta, onda nas ruter izbaci iz modova i moramo se ponovo ulogovati
+config#username ime secret sifra
+preduslov za ssh he da se ruter nalazi u nekom domeni -- r1(config)#ip domain-name [neki domen npr securiti.com, ne znaci nista ali mora biti konfigurisan]
+r1(config)#crypto key generate rsa 
+r1(config)#line vty 0 4 
+r1(config-line)#transport input [all,ssh,none,telnet - defaultni]
+r1(config-line)# login local -- pozivamo se na lokalnu bazu koja je definisana pri definisanju korisnika preko username komande 
+blokiranje bruteforse logovanja -- r1(config)#login block-for 45 attempts 3 within 100  (45,100 sekunde)
+sw1(config)# interface range fa0/1, fa0/3-9, fa0/11-24, go/2
+sw1(config-if-range)# shutdown
+kod svica, ip adresa se stavlja na vlan1 a defaultni gejtvej u config#ip default-gateway
+sw1(config)# ip domain-name security.com 
+sw1(config)# crypto key generate rsa
+#transport input ssh 
+#login local
+verifikacija ssh -- u cmd# ssh -l nazivKorisnika adresaNaKojuIdeSSH [TESTIRATI u kojem cmd]
+preduslov za ssh i telnet je da se ukljuci #enable password secret
+kod svica, ip adresa se stavlja na vlan1 a defaultni gejtvej u config#ip default-gateway
+
+
+---------------L5ospf
+R1(config)#router ospf [broj procesa na ovom ospf ruteru,lokalna uloga, omogucava da se pokrene vise ospf instanci]
+R1(config)#router ospf 1
+R1(config-router)#network 162.168.1.0 [wildcard mask] area [oblast kojoj pripada interfejs, po def je backbone oblast, tj == 0]
+R1(config)#interface loopback 0
+R1(config-if)#ip address 209.165.200.1 255.255.255.0
+R1(config)#ip route 0.0.0.0 0.0.0.0 loopback 0 --  def staticka ruta
+R1(config-if)#default-information originate  -- govori ruteru r1 da posalje info o def ruti svim ostalim ruterima, efekat se provjerava na ostalim ruterima, O*E2 u tabeli rutiranja kod r2, ad. ustanca 110 umjesto 1, metrika 1????
+r3(config)#router ospf 1
+r3(config)#area 1 range 172.16.0.0 255.255.255.0
+router# show ip ospf neighbor -- prikaz susjednih rutera, bitna kolona state, FULL - puno susjedstvo sa stranim ruterom 
+rucno: postavlja se prioritet na nivou interfejsa : router(config)#int g0/0; (config-if)#ip ospf prioriti <1-255> {1 je defalt }, ova komanda se ne tretira odmah, 'nema taj tzv preemptive karakter', mora se ponovo pokrenuti mreza, najjednostavnije na switchu interfejs range shutdown pa no shutdown
+
+
+---------------L6adhcp
+r2(config)#ip dhcp excluded-address 192.168.10.1 192.168.10.10 -- iskljucene sve adrese izmedju 1 i 10
+r2(config)#ip dhcp pool R1-LAN
+r2(dhcp-config)#network 192.168.10.0 255.255.255.0 -- ovo je adresa mreze iz koje se dodjeljuju adrese, [TESTIRATI adrese u kojoj se pool nalazi]
+r2(dhcp-config)#default-router 192.168.10.1 -- [CAKA ovdje njije default gateway nego default router]
+r2(dhcp-config)#dns-server 192.168.20.254
+R1(config)#int g0/0
+R1(config-if)#ip helper-address 10.1.1.2 -- ovo govori ruteru da kad primi brodkast poruku, pretvori je u unikast i salje je na adresu 10.1.1.2 
+u slucaju da neki od parametara ne dodje sa dhcp odgovorom, moze se pozvati iz cmdPc2#ipconfig /renew
+r2(config)# int g0/1
+r2(config-if)#ip address dhcp
+r2(config-if)#no shutdown
+r2#show ip int brief
+
+
+---------------L6bnat
+r1(config)# ip nat inside source static 172.16.16.1 64.100.50.1
+r1(config)#int g0/0
+r1(config-if)#nat inside
+r1(config)#int s0/0/0
+r1(config-if)#nat outside
+r1#show ip nat translations -- prikaz natovanja
+r2(config)# access-list 1 permit 172.16.0.0 [wildcard maska - 0.0.255.255] -- konfigurisanje access liste jedan
+r2(config)# ip nat pool nazivPoola prvaAdresa zadnjaAdresa netmaska adresaMaske
+r2(config)# ip nat pool POOL 209.165.200.229 209.165.200.230 netmask  255.255.255.224 -- ovjde imaju dvije javne adrese, .29 i .30
+r2(config)# ip nat inside source list 1 pool POOL 
+r1(config)# ip nat inside source list 1 pool ANY_POOL_NAME overload -- govori ruteru da ubaci portove u pricu, da preko tih portova prepozna odgovor, i preko tih portova izabere kojem hostu ce proslijediti odgovor
+r2(config)#ip nat inside source list 2 interface s0/1/1 overload 
+
+
+---------------L7ipv6
+R1(cpnfig)#ipv6 unisast-routing --- bitna komanda, omogucava da kroz interfejse rutera prolazi ipv6 komunikacija 
+R1(cpnfig)#int g0/0
+R1(cpnfig-if)#ipv6 address 2001:db8:1:1::1/64 --- sve komande iste kao kod ipv4, samo se koristi ipv6 prva kljucnma rijec, subnet maska ne postoji kao takova, vec se kuca sa '/brojMaske'
+R1(cpnfig-if)#ipv6 address fe80::1 link-local -- interfejs bi je svakako kreirao, ali bi bila dugacka i teska za prekucavanje, ovo je dobra praksa jer se preko ove adrese postavlja def gejtvej
+
+
+---------------script.sh
+#!/bin/bash
+    cat "$i" | grep '#'>>komande
+
+

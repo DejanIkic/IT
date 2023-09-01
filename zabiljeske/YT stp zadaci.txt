@@ -1,0 +1,3 @@
+1. U slucaju da svic ima istu cijenu dolaska do rut bridza na 2 razlicite rute, po cemu se bira?
+
+	Gleda se cijena linkova, ako je ista onda se gleda prioritet rutera, ako je isti onda ide mak adresa

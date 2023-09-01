@@ -1,0 +1,25 @@
+umjesto da gasimo portove, koristimo ovo 
+
+natjeramo svic da nauci koje su mak adrese na njegovim portovima, pa ako se pojavi neka druga, on odbije tog hosta
+
+konfigurise se na portovima svica 
+
+sw1(config)# int range fo/1-2
+sw1(config-if-range)#       [TESTIRATI sta fali ovjde]
+
+kljucna komanda 
+sw1(config-if-range)# switchport port-security
+
+postavljanje max 1 mak adrese za dati port -- sw1(config-if-range)# switchport port-security maximum 1 [1 je def]
+
+komanda koja omogucava svicu da dinamicki nauci mak adresu na portu i da je stavi u radnu konfiguraciju, nakon restartovanja svica on ce na odredjenom portu dozvoliti samo tu mak adresu --sw1(config-if-range)# switchport port-security mac-address sticky
+
+
+mod pri nezeljenom pristupu
+sw1(config-if-range)#  switchport port-security violation [protect - bez informacija, restrict - kod ove imaju neke informacije,shutdown - def]
+
+ostale portove po preporuci ugasiti
+
+s1#show port security int f0/2 -- ovo je za ispis 
+
+ako je na portu ukljucen violation shutdown, i on se poveze na ispravni host sa mac adresom iz konfiguracije, mora se izvrsiti intervencija, tad je port u error-disabled, zbog ovog stanja mora prvo #shutdown pa onda #no shutdown

@@ -1,0 +1,35 @@
+svi svicevi van mreze ne ucestvuju u STP
+
+1. biranje root bridga
+    1.1. najnizi konfigurisan prioritet
+    1.2. najnizu MAC aresu
+
+prioritet po def. isti
+
+2. root portovi
+    svaki svic koji nije root bridge (n-1 root portova)
+    'kako najbrze doci do root bridga'
+
+    10Mb    100     100
+    100Mb   10      19
+    1000Mb  1       4
+    10Gb    1       2
+
+    root port se stavlja (kruzic) na link koji je najblizi root bridgu
+
+
+3. designated portovi
+    portovi koji sigurno nece biti blokirani na kraju
+    3.1. svi na root bridgu, ne smiju biti blokirani
+    3.2. svi nasuprot root porta
+
+   [rezultujuce stablo]
+
+4. blokirani portovi
+    kod linkova koji nemaju ni RP ni DP, gleda se koji svic je blizi root portu, [ D je jaci/blizi, pa se port na E blokira], zatim prioritet pa MAC adresa
+
+
+
+2. primjer
+
+3. primjer

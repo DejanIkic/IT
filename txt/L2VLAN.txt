@@ -1,0 +1,80 @@
+vlan mozemo poistovijetiti sa pojmom brotkast domen ili mreza, omogucava da napravmimo razlicite brotkast domene na nivou svica kao l2 uredjaja -- na jedan svic povezati vise racunara koji ne pripadaju jednoj vec mogu i razlicitim mrezama
+
+mora postojati uredjaj 3 sloja da bi se omogucila komunikacija uredjaja u razlicitim vlanovima 
+
+tehnika sa ruterima
+
+[ po defoltu racunari nece moci razgovaratu jer su u razlicitim mrezama, tako konfigurisani, a svicevi se ponasaju kao da su svi uredjaji u istoj mrezi]
+
+vlaanovi transparentni za racunari, njima pojamm vlan nije poznat, sve se podesava, na svicu
+
+svaki svicevi imaju vlan 1 po defoltu, i svi portovi se nalaze u vlanu 1 
+
+wsitch#show vlan brief 
+
+imamo predefinisane 1002 - 1005 vlanove, -legacy
+
+ostali vlanovi se eksplicitno kreiraju
+
+(config) #vlan 10
+(config-vlan) #name Studenti
+
+(config) #vlan 20
+(config-vlan) #name Profesori
+
+ovo se mora uraditi na svim ostalim svicevima, bez obzira da li imaju hostove u tim vlanovima, jer moraju znati gdje da salju saobracaj [TESTIRATI sta ako nisu postavljeni vlanovi na svim svicevima, kakva je komunikacija tu moguca]
+
+na osnovu porta se stavlja racunar u neki vlan
+
+config # int fasteternet 0/3
+switch(cofnig-int)#switchport mode access
+-- moze bit access ili trunk
+access znaci da se tu nalazi pc
+
+switch(cofnig-int)#switchport access vlan 10 -- ovo podesava koji je vlan na tom interfejsu [TESTIRATI ima li komanda switchport trunk vlan 10]
+
+switch(cofnig-int)# 
+
+ako je svic u vlan1 onda moze slati samo saobracaj sa vlan1, sto je u ovom primjeru nikakav sadrzaj [TESTIRATI]
+
+svi portovi izmedju sviceva su u trunk modu, 
+trunk znaci da ce se preko tog porta slati saobracaj izmedju svih vlanova, ali se moraju tagovati tj - jedan svic govori drugom iz kog to vlana dolazi frejm
+
+SW(config)# interface range f0/1-2
+SW(config-if-range)# switchport mode trunk
+
+[CAKA] -- provjeriti access/trunk ako je na portu pc ili svic
+
+do sad moze onda komunikacija medju istim vlanovima, za druge vlanove treba ruter
+
+moze koliko vlanova toliko kablova ruter-svic, ovo nije skalabilno rjesenje npr za 100 vlanova
+
+KONCEPT PODINTERFEJS = na jednom fizickom portu rutera kreiramo vise logickih podinterfejsa, a ruter svake od njih smatra kao zasebne interfejse -> ruter i svic povezani samo sa jednim kablom, a na portu rutera pravimo (broj vlanova) podinterfejsa
+
+[TESTIRATI dvije linije ispod, da li valja u zagradama, tj mod u ruteru]
+ruter(cofnig-in)#no shutdown  
+ruter(config)# interface g0/0.brojPodinterfejsa{dobra praksa broj vlana, ne mora} --ovo ulazi u mod subinterfejsa
+
+kljucna komanda
+ruter(config-subinf)# encapsulation dot1Q 10 {ovaj broj mora se podudarati sa brojem vlana}
+
+ruter(config-subinf)#ip address 192.168.10.254 255,255,255,0 -- ovo je defaultni gejtvej za racunare sa vlana 10
+[CAKA] ------- OBAVEZAN REDOSLIJED------
+encapsulation dot1Q ponistava ip adresu ako postoji
+isto i za drugi subinterfejs i vlan 20
+
+-- postaviti na racunarima gejtvej
+
+frejm sa pca izgleda normalno, kao i kod obicne komunikacije sa racunarima van svoje mreze, jedino mu je potrebna mac adresa defaultnog gejtveja, poruka dolazi do svica, koji mora obavjestiti naredni svic da taj paket dolazi sa nekog vlana, to je tgovanje, tag je posebno polje koje govori iz kog vlana dolazi ta poruka, to su polja nakon source adrese, u njima je identifikator za vlan, ima 12 bita.
+taj se protokol naziva 800.1q pa odatle i ime dot1Q.
+na ruteru se mijenja tag u npr sa 10 na 20. zadnji svic skida taj tag kad ga salje racunaru, jer ovaj ne razumije koncept tagovanja
+
+svaka mreza preko vlana i podinterfejsa rutera predstavlja posebnu direktnu vezu na ruteru u tabeli rutiranja 
+
+spanning tree se moze napraviti posebno za svaki vlan 
+
+spanning tree pravi stablo za svaki vlan, ako se ne podesi drugacije, stablo ce izgledati isto za svaki vlan
+
+prvo svi svicevi tj portovi u trank mod
+optimizacija linkova :npr switch0 root brid za vlan1, sw1 za vlan10, sw2 za vlan20
+

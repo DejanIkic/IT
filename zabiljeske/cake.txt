@@ -1,0 +1,56 @@
+---------------A1spanningTree
+
+
+---------------A6BGP
+[CAKA] ako je LP postavljen, na bilo kakav nacin, MED se nece ni gledati
+
+
+---------------cake
+[CAKA] ako je LP postavljen, na bilo kakav nacin, MED se nece ni gledati
+
+
+---------------komande
+r2(dhcp-config)#default-router 192.168.10.1 -- [CAKA ovdje njije default gateway nego default router]
+
+
+---------------L1stp
+
+
+---------------L2VLAN
+[CAKA] -- provjeriti access/trunk ako je na portu pc ili svic
+[CAKA] ------- OBAVEZAN REDOSLIJED------
+
+
+---------------L3etherchanelWanWlan
+[CAKA]'ove ostale opcije mozete sami istraziti, nije toliko bitno'
+
+
+---------------L4portSecurity
+
+
+---------------L4RIP
+
+
+---------------L4ssh
+
+
+---------------L5ospf
+
+
+---------------L6adhcp
+r2(dhcp-config)#default-router 192.168.10.1 -- [CAKA ovdje njije default gateway nego default router]
+
+
+---------------L6bnat
+
+
+---------------L7ipv6
+
+
+---------------script.sh
+    cat "$i" | grep 'CAK'>>cake
+
+
+---------------test
+
+

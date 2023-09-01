@@ -1,0 +1,69 @@
+---------------A1spanningTree
+
+
+---------------A6BGP
+AS2 i AS3, putanja od as3 do as2 gdje nista nije uradjeno(ni LP ni AS ni MED), gleda se zadnji kriterijum, tj ruta koja je prva naucena??? u primjeru se uzima R12-R10 umjesto R12-R11 jer je index r10 manji od r11 [TESTIRATI ]
+
+
+---------------komande
+switch(cofnig-int)#switchport access vlan 10 -- ovo podesava koji je vlan na tom interfejsu [TESTIRATI ima li komanda switchport trunk vlan 10]
+#int s0/0/1 ; #ppp authentication chap [TESTIRATI sta je chap]
+sw1(config-if-range)#       [TESTIRATI sta fali ovjde]
+verifikacija ssh -- u cmd# ssh -l nazivKorisnika adresaNaKojuIdeSSH [TESTIRATI u kojem cmd]
+r2(dhcp-config)#network 192.168.10.0 255.255.255.0 -- ovo je adresa mreze iz koje se dodjeljuju adrese, [TESTIRATI adrese u kojoj se pool nalazi]
+
+
+---------------L1stp
+    +1 sabiranje sa vlanom   [TESTIRATI kad je vlan razlicit od jedan koliki je zbir]
+
+
+---------------L2VLAN
+ovo se mora uraditi na svim ostalim svicevima, bez obzira da li imaju hostove u tim vlanovima, jer moraju znati gdje da salju saobracaj [TESTIRATI sta ako nisu postavljeni vlanovi na svim svicevima, kakva je komunikacija tu moguca]
+switch(cofnig-int)#switchport access vlan 10 -- ovo podesava koji je vlan na tom interfejsu [TESTIRATI ima li komanda switchport trunk vlan 10]
+ako je svic u vlan1 onda moze slati samo saobracaj sa vlan1, sto je u ovom primjeru nikakav sadrzaj [TESTIRATI]
+[TESTIRATI dvije linije ispod, da li valja u zagradama, tj mod u ruteru]
+
+
+---------------L3etherchanelWanWlan
+-Po1(SU) - s znaci da su u etherchanelu na nivou 2, a u znaci da se koriste [TESTIRATI ]
+HWIC-2T -- za serijski link [TESTIRATI sta je ovo]
+#int s0/0/1 ; #ppp authentication chap [TESTIRATI sta je chap]
+[TESTIRATI] sta se nalazi u nat tabeli
+
+
+---------------L4portSecurity
+sw1(config-if-range)#       [TESTIRATI sta fali ovjde]
+
+
+---------------L4RIP
+[TESTIRATI moze li RIP i staticke putanje]
+svaki ruter, svakih 30 sekundi, uzima svoju ruting tabelu i salje je na 'sve ripom aktivirane interfejse' [TESTIRATI da li se salju apdejti na direktno povezane mreze, ili samo na ove unesene preko 'netwokr {address}']
+
+
+---------------L4ssh
+ip adresa na swittchu da mu se moze pristupiti [TESTIRATI kako se postavlja]
+verifikacija ssh -- u cmd# ssh -l nazivKorisnika adresaNaKojuIdeSSH [TESTIRATI u kojem cmd]
+
+
+---------------L5ospf
+[TESTIRATI sta ako se umjesto loopbeka stavi internet na taj port]
+FULL/DROTHER i FULL/BDR ???? [TESTIRATI ]
+[TESTIRATI da li se mijenja 'komsiluk' kad se dodaju interfejsi na rutere dalje od svica ]
+
+
+---------------L6adhcp
+r2(dhcp-config)#network 192.168.10.0 255.255.255.0 -- ovo je adresa mreze iz koje se dodjeljuju adrese, [TESTIRATI adrese u kojoj se pool nalazi]
+
+
+---------------L6bnat
+kad nat poruka [TESTIRATI koja tacno poruka] dodje do rutera koji vrsi natovanje, destination ip se mijenja, inbound je javna, 64.x.x.x a outbound je 172.x.x.x
+ovdje se vise adresa prevodi u vise adresa, problem ako ja [TESTIRATI ruter valjda] imam 5 javnih adresa, onda mogu natirati samo 5 racunara iz mreze 
+
+
+---------------L7ipv6
+
+
+---------------script.sh
+    cat "$i" | grep 'TEST'>>test
+
+

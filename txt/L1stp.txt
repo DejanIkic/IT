@@ -1,0 +1,40 @@
+spanning tree po defoltu upaljen kod switcheva
+
+#show spanning-tree ( u privilegovanom modu)
+    root id - info o root bridgu
+    bridge id - trenutni switch
+    lista i stanje interfejsa
+
+    po def switcevi imaju prioritet 32768
+    +1 sabiranje sa vlanom   [TESTIRATI kad je vlan razlicit od jedan koliki je zbir]
+
+    ako ne kreiramo nijedan vlan, znamo da je podesen na vlan1
+
+    status [FWD, BLK]
+
+#spanning-tree vlan 1 priority [ manji od postojeceg]
+
+alternativa 
+
+#spanning-tree vlan 1 root primary -- automatski bira prioritet i postaje root bridge
+
+#spanning-tree 1 root secondary -- zamjenik root bridga
+
+tajmeri - oko 50 sekundi, kad prodje tajmer tad se bira da li ce port da prosljedjuje podatke ili ne
+
+ako se pc poveze na svic, bez petlje, moze se natjerati svic da taj port odmah postavi kao prosljedjujuci -- 
+# komanda na interfejsu
+# spanning-tre portfast 
+dobijamo upozorenje - ni u kom slucaju nakon ove komande na taj port ne smijemo prikljuciti drugi svic, jer se moze desitit da nastane petlja i da taj port bude blokiran -- preporuka
+# spanning-tre portfast 
+# spanning-tree bpduguard enable -- ako se na ovom portu ikad prikaze BPDU poruka (a nju salje samo svic, nikad racunar), onda ce taj port automatski ugasiti (bolje ugasen nego petlja) 
+
+-- ako imamo 2 svica povezana preko 2 kabla -> petlja -> svi dodatni kablovi su blokirani (ima komanda eterchannel - kasnije)
+treci kriterijum - bira port koji sa druge strane ima port sa nizim indeksom 
+-> ako to ne zelimo, podesavamo:
+    #show spanning-tree
+    ovdje gledamo priority.number
+    128 je prioritet porta
+    .1 i .2 su indexi porta
+    [ sw 4 i sw 5, sw4 je root port, znaci blokira se jedan port kod sw 5, isti switcevi, isti , switch 5 gleda kolonu u sw 4]
+    u sw4 # spanning-tree vlan 1 port-priority [k*16]

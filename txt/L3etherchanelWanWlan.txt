@@ -1,0 +1,74 @@
+etherchanel -- ako su swicevi povezani sa dva linka,kada se etherchanel konfigurise ispravno, onda se dva linka posmatraju kao jedan logicki, pa ga onda spaning tree nece blokirati, moze do 8 linkova u jedan etherchanel
+switch(config)# int range fa0/1-2
+switch(config-if-range)#channel-group [broj etherchanela] mode [5 opcija, on znaci da linkovi bezuslovno odu u etherchanel]
+
+[CAKA]'ove ostale opcije mozete sami istraziti, nije toliko bitno'
+
+mora na oba svica
+
+u etherchanel moraju linkovi istih brzina, npr ne moze fast i gigab
+
+switch#show etherchannel summary -- komanda za verifikaciju etherchanela
+-Po1(SU) - s znaci da su u etherchanelu na nivou 2, a u znaci da se koriste [TESTIRATI ]
+
+
+HWIC-2T -- za serijski link [TESTIRATI sta je ovo]
+
+napomena -- ruter -> copy running startup
+
+def protokol na serijskim linkovima nije ethernet vec HDLC, nije najjace rjesenje bolji je PPP
+
+PPP moze sve sto i HDLC, a i dodatne bitne 4, jedna od njij he autentikacija
+
+r1(config-if)# encapsulation ppp
+ovo mora na oba rutera, jer nisu kompatibilni
+
+no encapsulation ppp vraca na def
+
+konfiguracija ppp autentikacije -- ruteri moraju razmijeniti neku zajednicku sifru da bi link postao aktivan 
+
+podesavanje sifre --
+R1(config)# username [R2 - ovdje ide hostname rutera sa kojim se treba izvrsiti autentikacija, ruter sa druge strane]  password lozinka
+R2(config)#username R1 password lozinka
+
+aktivacija autentikacije --
+na interfejsu
+#int s0/0/1 ; #ppp authentication chap [TESTIRATI sta je chap]
+
+
+----------------------- wlan
+svaki wireless ruter po def ima 5 portova, 1 od njih je internet port koji sluzi za povezivanje na neku mreznu infrastrukturu, na ostala 4 se povezujemo kao na svic, + on je i ACCESS POINT
+
+ruter na wireless ruter se povezuje sa 'Internet' portom
+
+svaki wireless ruter ima dvije mreze, jedna prema infrastrukturi, druga prema mrezi u kojoj funkcionise i kao dhcp server
+
+wireless -- podesava se preko gui-ja
+
+setup -- podesavanje one dvije mreze, internet i network
+
+def gateway kod wireless rutera je ruter na koji je on povezan, ovo je za internet mrezu
+
+drugi korak - karakteristike wireless mreze 
+
+ssid - ime mreze 
+wireles security - za lozinku, min 8 karaktera, po defaultu nema sigurnosti
+wpa2 personal - za kucu i obicne korisnike
+wpa2 enterprise - za servere
+
+
+wdministration - 
+***** - admin 
+***** - admin 
+
+laptopi u packet traceru nemaju wireless karticu, mora se dodati wpc300n
+
+svaki wireless ruter pri slanju paketa radi NATiranje, tj skida source ip adresu hosta u tom networku i stavlja source svoju ip adresu od svog interfejsa, 
+situacija R2 - WIRELES - NETWORK -> za r2 ne treba staticka ruta ka NETWORK, bas zbog natiranja, jer je onda njemu udaljena mreza u sustini direktno povezana
+NETWORK je nevidljiv za ostatak mreze 
+
+svaki wireless ruter ima samo jednu def rutu, jer je uvijek rubni ruter, pa se ne treba nista konfigurisati 
+
+[TESTIRATI] sta se nalazi u nat tabeli
+
+

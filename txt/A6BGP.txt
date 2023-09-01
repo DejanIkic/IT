@@ -1,0 +1,64 @@
+izbor najkreace rute preko atributa, ruter redom prolazi kroz te atribute i dok ne nadje prvi missmatch, prolazi kroz atribute, atributi su rangirani po nekoj jacini
+
+za nas u zadacima bitni Local Preference, AS Path, MED vrijednost (ovim redom sortirane jacine)
+
+kod BGP nema load balancinga
+
+mi smo uglavnom administratori na jednom autonomnom sistemu
+
+jedan od dva nacina, sa LP ili sa AS Path, 
+
+ako ne uradimo nista. ruteri uglavnom koriste AS Path atribut, bira putanju sa kracim AS path (manji broj Autonomnih Sistema)
+
+na odlazni saobracaj se utice manipulacijom dolaznih ruta 
+
+LP je bolji sto je veci, def vr je 100, lp je poznat cijelom autonomnom sistemu
+
+
+drugi nacin, sa AS path, as path prepending (laziranje), upisivanje(ponavljanje) nekog autonomnog sistema u as pathu da bi as path izledao duzi,
+
+nema potrebe i za LP i za AS Path 
+
+
+LP utice na odlazni saobracaj,
+AS Path utice i na dolazni i na odlazni
+MED utice na dolazni saobracaj
+
+
+na dolazni saobracaj se utice manipulacijom odlaznih ruta
+
+ovo na dva nacina, AS Path prepending i MED 
+
+MED je bolji sto je manji, popularno se naziva i metrika, Multiple Exit Discriminator
+
+problem sa MEDom je sto je nizak, tj ako je na drugoj strani radjeno sa LP ili AS P za odlazni saobracaj, do meda se nece ni doci
+
+cesto je kod bgp saobracaj asimetrican, od X-Y mreze nije isti put kao Y-X
+
+AS1{R1} dvije putanje AS2{R2, R3} --- r3 daje LP vr 10 za sve rute koje dobije od r5, a LP vr 200 za sve rute koje dobije od r1->> sav saobracaj is AS2 u AS1 ce ici donjom putanjom, tj R3->R1, cak i kad r2 dobije paket sa r1, ovaj ga salje na r3 da bi ga ovaj proslijedio na r1
+
+
+[CAKA] ako je LP postavljen, na bilo kakav nacin, MED se nece ni gledati
+
+AS2 i AS3, putanja od as3 do as2 gdje nista nije uradjeno(ni LP ni AS ni MED), gleda se zadnji kriterijum, tj ruta koja je prva naucena??? u primjeru se uzima R12-R10 umjesto R12-R11 jer je index r10 manji od r11 [TESTIRATI ]
+
+unutar AS2 je ospf sa admin dist 110, a interni bgp (koji vjerovatno postoji) ima admin distancu 200 -> ospf bira kako ce saobracaj proci kroz autonomni sistem, jer je jaci od internog bgp  
+
+
+next hop kod bgp ne funckionise isto kao kod internih protokola rutiranja, to nije sljedeci ruter kojem se salje poruka, nego sljedeci ruter u drugom AS kojem se salje poruka
+
+pitanje 22 sa prezentacije. u ovoj situaciji se ne moze koristiti MED jer nem ozemo iz AS2 slati MED u dva razlicita ASistema, 
+MED ima smisla samo ako se salje ka ruterima koji su u istom Autonomnom Sistemu
+
+
+kod pitanja obratiti paznju sta pise, tacnije, koji se atribut postavlja, gdje, za kakve rute i kako je postavljen
+
+
+
+LP i AS Path
+na odlazni saobracaj se utice manipulacijom dolaznih ruta 
+
+
+
+AS Path i MED
+na dolazni saobracaj se utice manipulacijom odlaznih ruta

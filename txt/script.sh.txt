@@ -1,0 +1,12 @@
+#!/bin/bash
+
+
+//mkdir txt
+fajlovi=$(ls)
+
+for i in $fajlovi
+do
+    echo "$i"
+    cp $i "./txt/$i.txt"
+done
+

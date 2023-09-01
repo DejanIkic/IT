@@ -1,0 +1,27 @@
+podesavanje R2 da bude dhcp server, treba podesiti onoliko poolova koliko ima mreza 
+
+dhcp pool ima vise adresa, neke se moraju iskljuciti, npr zauzete 
+
+r2(config)#ip dhcp excluded-address 192.168.10.1 192.168.10.10 -- iskljucene sve adrese izmedju 1 i 10
+
+r2(config)#ip dhcp pool R1-LAN
+r2(dhcp-config)#network 192.168.10.0 255.255.255.0 -- ovo je adresa mreze iz koje se dodjeljuju adrese, [TESTIRATI adrese u kojoj se pool nalazi]
+
+r2(dhcp-config)#default-router 192.168.10.1 -- [CAKA ovdje njije default gateway nego default router]
+r2(dhcp-config)#dns-server 192.168.20.254
+
+kad host trazi dhcp adresu, salje brodkast poruku, a ona nece moci proci dalje od rutera na kom je nakace host, mora se podesiti interfejs na kome se nalazi host
+R1(config)#int g0/0
+R1(config-if)#ip helper-address 10.1.1.2 -- ovo govori ruteru da kad primi brodkast poruku, pretvori je u unikast i salje je na adresu 10.1.1.2 
+
+
+u slucaju da neki od parametara ne dodje sa dhcp odgovorom, moze se pozvati iz cmdPc2#ipconfig /renew
+
+
+
+za ruter koji treba biti dhcp klijent, npr ruter da dobije adresu sa interneta:
+r2(config)# int g0/1
+r2(config-if)#ip address dhcp
+r2(config-if)#no shutdown
+
+r2#show ip int brief

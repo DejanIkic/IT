@@ -1,0 +1,35 @@
+svaki interfejs koji radi sa ipv6 adresama ima dvije adrese, tacnije jednu mora da ima, drugu moze da ima 
+
+svaki interfejs mora da ima link lokal adresu, one pocunju sa fe80, ako je mi ne zadamo, interfejs ce je sam kreirati
+
+driuga vrsta (tacnije prva) su globalne unicast ipv6 adrese, ekvivalent javnim ipv4 adresama 
+
+za sad se koristi samo 1/8 adresa, prepoznajemo ih kako pocinju sa 2001:nestodrugo
+
+R1(cpnfig)#ipv6 unisast-routing --- bitna komanda, omogucava da kroz interfejse rutera prolazi ipv6 komunikacija 
+
+R1(cpnfig)#int g0/0
+R1(cpnfig-if)#ipv6 address 2001:db8:1:1::1/64 --- sve komande iste kao kod ipv4, samo se koristi ipv6 prva kljucnma rijec, subnet maska ne postoji kao takova, vec se kuca sa '/brojMaske'
+
+R1(cpnfig-if)#ipv6 address fe80::1 link-local -- interfejs bi je svakako kreirao, ali bi bila dugacka i teska za prekucavanje, ovo je dobra praksa jer se preko ove adrese postavlja def gejtvej
+
+'cetvrti hekstet'
+
+link lokal adresa ima iskljucivo lokalno znacenje, (slicno MAC adresi) pa nije problem da se ista link lokal adresa koristi u razlicitim mrezama, jer ne izlazi iz mreze -> svi hostovi imaju istu adresu def gejtveja, ali on zapravo nije isti 
+
+link lokal adresa se ne dodaje na racunaru, on ce je sam dodati
+
+
+
+podmrezavanje ipv6
+
+podmrezavanje kod ipv6 se uvijek radi mijenjanjem cetvrtog heksteta, jer ako je maska /64 i ako je taj hekstet razlicit onda ce i mreze biti razlicite 
+
+ipv6 nisu case-sensitiv adrese 
+
+
+ne mogu biti dvije iste link lkokal adrese u jednoj mrezi, doslo bi do kolizije, npr serijski link izmedju dva rutera
+
+gui64
+
+hostovi mogu dobiti adresu automatski preko autoconfiga, : dobije prefiks od rutera, a onda sam sebi kreira hostt id (adresu)  koristeci gui64 pravilo -- unapredjenje u odnosu na ipv4, a ipv6 moze koristiti i dhcp

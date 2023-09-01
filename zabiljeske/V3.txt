@@ -1,0 +1,13 @@
+kad se koristi MLS, po def radi kao svic, pa se portovi koji trebaju funkcionisati kao kod rutera trebaju postaviti na 'MLS(config-if)#no switchport'
+
+
+'Trunk configuration differs slightly on a Layer 3 switch. On the Layer 3 switch, the trunking interface needs to be encapsulated with the dot1q protocol, however it is not necessary to specify VLAN numbers as it is when working with a router and subinterfaces.'
+
+
+'a.     Use the show ip route command. Are there any active routes?
+
+ b.     Enter the ip routing command to enable routing in global configuration mode.
+        MLS(config)# ip routing
+
+ c.     Use the show ip route command to verify routing is enabled.'   
+ komanda  MLS(config)# ip routing    ----- se koristi da se omoguci rutiranje na l3 swicu

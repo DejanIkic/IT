@@ -1,0 +1,50 @@
+za razliku od telneta, ssh omogucava sigurno remote pristupanje udaljenim uredjajima
+
+1. spreciti ios da razrijesi pogresno unesene komande -- r1(config)#no ip domain-lookup
+
+hostname mora biti isti na topologiji da bi se bodovao
+
+r1(config)#security passwords min-length 10
+
+r1(config-line)#exec-timeout 7 -- ako smo neaktivni ovoliko minuta, onda nas ruter izbaci iz modova i moramo se ponovo ulogovati
+
+moramo dodati korisnika i sifru njegovu, ovo nema kod telneta 
+config#username ime secret sifra
+
+preduslov za ssh he da se ruter nalazi u nekom domeni -- r1(config)#ip domain-name [neki domen npr securiti.com, ne znaci nista ali mora biti konfigurisan]
+
+generisanje kljuceva koji se koriste pri ssh komunikaciji --
+r1(config)#crypto key generate rsa 
+
+da se omoguci [valjda razmjena kljuceva] mora se uci u line vty 0 4
+r1(config)#line vty 0 4 
+r1(config-line)#transport input [all,ssh,none,telnet - defaultni]
+r1(config-line)# login local -- pozivamo se na lokalnu bazu koja je definisana pri definisanju korisnika preko username komande 
+
+blokiranje bruteforse logovanja -- r1(config)#login block-for 45 attempts 3 within 100  (45,100 sekunde)
+
+kod svica, dobra praksa da se ugase svi portovi koji se ne koriste, ako se napadaz nakaci na neki od portova, ne moze nita uraditi jer je ugasen port
+sw1(config)# interface range fa0/1, fa0/3-9, fa0/11-24, go/2
+sw1(config-if-range)# shutdown
+
+ip adresa na swittchu da mu se moze pristupiti [TESTIRATI kako se postavlja]
+kod svica, ip adresa se stavlja na vlan1 a defaultni gejtvej u config#ip default-gateway
+
+sw1(config)# ip domain-name security.com 
+sw1(config)# crypto key generate rsa
+
+#transport input ssh 
+#login local
+
+
+verifikacija ssh -- u cmd# ssh -l nazivKorisnika adresaNaKojuIdeSSH [TESTIRATI u kojem cmd]
+zatim password 
+
+preduslov za ssh i telnet je da se ukljuci #enable password secret
+
+kod svica, ip adresa se stavlja na vlan1 a defaultni gejtvej u config#ip default-gateway
+
+
+
+RemotePC -> switch :    cmd> ssh -l NETadmin 192.168.1.254
+                        password: 
