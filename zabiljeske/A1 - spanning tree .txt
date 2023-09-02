@@ -41,4 +41,4 @@ S0(config)#spanning-tree vlan 1 priority 4096
 S3(config)#interface fa0/5
 S3(config-if)#spanning-tree portfast
 
-S3(config)#show spanning-tree
+S3#show spanning-tree

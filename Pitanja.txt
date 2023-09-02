@@ -6,8 +6,12 @@
 6. sta je bloking port status
 7. kad se koristi zamjenik root bridza
 
-
-
+8. prioritet + vlan u svicu, da li se uvijek sabira sa 1
+9. 3 prioriteta za izbor kod petlje izmedju 2 svica, cijena/port priority
+10. [TESTIRATI sta ako nisu postavljeni vlanovi na svim svicevima, kakva je komunikacija tu moguca]
+11. Access vs trunk, sta ako se doda hab/ruter/server
+12. ZADATAK IZ CISKA (3 svica, po dva linka izmedju svakoga)
+13. Native VLAN
 
 
 
@@ -20,3 +24,10 @@ prioritet svica:    podrazumijevano 32768,  djelivo sa 1024
 /   prioritet2 / indeks2
 p1      /1
 i1
+
+
+
+koje je def. ime vlana kad se ukuca komanda npr sw2#vlan 10
+saobracaj podataka sa hosta ako nema podesen def gejtvej
+
+PVST vs RPVST

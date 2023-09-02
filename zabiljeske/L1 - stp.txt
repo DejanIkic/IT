@@ -1,31 +1,40 @@
 spanning tree po defoltu upaljen kod switcheva
 
+nikada se saobracaj nece slati preko linka koji je blokiran
+
 #show spanning-tree ( u privilegovanom modu)
     root id - info o root bridgu
+        Hello time 2 sec Max age 20 sec forward delay 15 sec
     bridge id - trenutni switch
+        Hello time 2 sec Max age 20 sec forward delay 15 sec        [TESTIRATI]
+        + Aging time 20
     lista i stanje interfejsa
+        status [FWD, BLK]
+        role [Root,Desg, Altn]
+        cost 19 -- znaci da je na tom interfejsu FastEternet
 
     po def switcevi imaju prioritet 32768
     +1 sabiranje sa vlanom   [TESTIRATI kad je vlan razlicit od jedan koliki je zbir]
 
     ako ne kreiramo nijedan vlan, znamo da je podesen na vlan1
 
-    status [FWD, BLK]
+promjenom brzina portova ne mijenja se root bridz
 
-#spanning-tree vlan 1 priority [ manji od postojeceg]
+#spanning-tree vlan 1 priority [ manji od postojeceg, 0-61400, k*4096]
 
 alternativa 
 
-#spanning-tree vlan 1 root primary -- automatski bira prioritet i postaje root bridge
+#spanning-tree vlan 1 root primary -- automatski bira prioritet i postaje root bridge, bira najmanji moguci prioritet u topologiji
 
 #spanning-tree 1 root secondary -- zamjenik root bridga
 
 tajmeri - oko 50 sekundi, kad prodje tajmer tad se bira da li ce port da prosljedjuje podatke ili ne
+    jedan max age od 20 i 2 forward delay po 15
 
 ako se pc poveze na svic, bez petlje, moze se natjerati svic da taj port odmah postavi kao prosljedjujuci -- 
 # komanda na interfejsu
 # spanning-tre portfast 
-dobijamo upozorenje - ni u kom slucaju nakon ove komande na taj port ne smijemo prikljuciti drugi svic, jer se moze desitit da nastane petlja i da taj port bude blokiran -- preporuka
+dobijamo upozorenje - ni u kom slucaju nakon ove komande na taj port ne smijemo prikljuciti drugi svic, jer se moze desitit da nastane petlja i da taj port bude blokiran -- preporuka ova dolje komanda
 # spanning-tre portfast 
 # spanning-tree bpduguard enable -- ako se na ovom portu ikad prikaze BPDU poruka (a nju salje samo svic, nikad racunar), onda ce taj port automatski ugasiti (bolje ugasen nego petlja) 
 
@@ -38,3 +47,12 @@ treci kriterijum - bira port koji sa druge strane ima port sa nizim indeksom
     .1 i .2 su indexi porta
     [ sw 4 i sw 5, sw4 je root port, znaci blokira se jedan port kod sw 5, isti switcevi, isti , switch 5 gleda kolonu u sw 4]
     u sw4 # spanning-tree vlan 1 port-priority [k*16]
+
+    kod sw5 se blokira port, sto znaci da moramo promijeniti kolonu P.num u svicu 4, tj mijenjamo prioritet porta u sv 4
+
+    za veze f1 - f1  i f2 - f2  ako zelimo da f1 bude aktivan a f2 blokiran na sw5, onda na sw 4 moramo omoguciti da je pr.num od f1 bude MANJI od pr.num od F2
+
+[TESTIRATI  2 svica sa dva linka, jedan fast drugi GB, ima li veze brzina sa izborom root porta i blok porta   ]
+    za svic 4  i svic 5, gdje je svic 4 root bridz, na svicu 5 podesavamo cijenu linka do roota, a na svicu 4 mijenjamo prioritet porta, oba ova slucaja uticu na portove sa svica 5, ZNACI ZA SVIC 5 CIJENA NA NJEMU A PRIORITET PORTA NA DRUGOJ STRANI
+
+    u slucaju veze f1 -g1 i g1-f1 redom za svic4 - svic 5, oba linka imaju cijenu 19, jer iako je povezan link na gigabitni port, on radi kao fast eternet jer je sa druge strane to maksimalna brzina
