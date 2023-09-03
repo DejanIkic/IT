@@ -1,0 +1,17 @@
+1. Ne utiče, stavio je da zbuni ljude.
+2. MAC nema veze sa mrežnim adresama, ali ne znam kako se na njega utiče.
+3. Biće blokiran onaj koji je na suprotnoj strani od većeg indeksa root bridga. Ako root bridge ima f0/1 i fo/2 biće blokiran ovaj nasuprot f0/2.
+4. Stavlja se kao zamjena za root bridge, znaci root bridge ce biti neki drugi.
+5. nez
+6. blokiran port znaci da se taj link gdje je port ne koristi u spanning tree, tj. tuda nece ici paketi.
+7. vjerovatno kod otkaza root bridga, nije radjen takav primjer a vjerujem da i nema mogucnost simulacije.
+8. nije mi jasno pitanje
+9. koji je root, koji ima veci prioritet, manju mac adresu, port priority gleda samo koji ce biti blokiran na suprotnoj strani.
+10. moguca je komunikacija ako imas srece pa se potrefi da je spanning tree odredio stablo bas preko onih sviceva koji imaju podesen vlan. Što znači uvijek treba dodati sve vlanove na svičeve.
+11. access se postavlja na portove koje imaju računare, trunk izmedju svičeva i onaj port sviča koji ide na ruter. Ako se doda hab nema nikakve promjene on ne utice na proces spanning tree. Ruter omućava komunikaciju između računara koji su u različitim vlanovima. Server isto kao računar.
+12. Ne smije se desiti petlja tako da će od 6 linkova biti blokirana 4.
+13. ne znam poentu
+14. nez
+15. kod l3 sviča pretvara taj interfejs u obični port kao na ruteru(više se ne mogu koristiti opcije kao da je port sviča)
+16. trebaju se ubaciti u trunk i omogučiti enkapsulacija. switchport mode trunk->switchport trunk encapsulation dot1q
+17. ruter i nema vlan native? ako se razlikuje izmedju sviceva vjerovatno dolazi do problema kad ne znaju na koji vlan treba poslati
