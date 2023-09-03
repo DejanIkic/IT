@@ -1,7 +1,7 @@
 etherchanel -- ako su swicevi povezani sa dva linka,kada se etherchanel konfigurise ispravno, onda se dva linka posmatraju kao jedan logicki, pa ga onda spaning tree nece blokirati, moze do 8 linkova u jedan etherchanel
 switch(config)# int range fa0/1-2
 switch(config-if-range)#channel-group [broj etherchanela] mode [5 opcija, on znaci da linkovi bezuslovno odu u etherchanel]
-
+na svicu iz zadatka broj etherchanela 1-6, 
 [CAKA]'ove ostale opcije mozete sami istraziti, nije toliko bitno'
 
 mora na oba svica
@@ -9,7 +9,9 @@ mora na oba svica
 u etherchanel moraju linkovi istih brzina, npr ne moze fast i gigab
 
 switch#show etherchannel summary -- komanda za verifikaciju etherchanela
--Po1(SU) - S znaci da su u etherchanelu na nivou 2, a U znaci da se koriste [TESTIRATI ]
+-Po1(SU) - S znaci da su u etherchanelu na nivou 2, a U znaci da se koriste [TESTIRATI provjeriti ostale oznake, npr u koloni Ports, P znaci da su u port-channelu]
+
+[TESTIRATI razlika group i port-channel]
 
 
 HWIC-2T -- za serijski link [TESTIRATI sta je ovo] 'The HWIC-2T is a Cisco 2-Port Serial High-Speed WAN Interface Card, providing 2 serial ports.'
@@ -27,6 +29,8 @@ no encapsulation ppp vraca na def
 
 konfiguracija ppp autentikacije -- ruteri moraju razmijeniti neku zajednicku sifru da bi link postao aktivan 
 
+[TESTIRATI moze li teci komunikacija ako se samo podesi encapsulation ppp, bez sifre]
+
 podesavanje sifre --
 R1(config)# username [R2 - ovdje ide hostname rutera sa kojim se treba izvrsiti autentikacija, ruter sa druge strane]  password lozinka
 R2(config)#username R1 password lozinka
@@ -41,7 +45,9 @@ CHAP je protokol autentifikacije koji se koristi za verifikaciju identiteta na m
 --------------------
 
 ----------------------- wlan
-svaki wireless ruter po def ima 5 portova, 1 od njih je internet port koji sluzi za povezivanje na neku mreznu infrastrukturu, na ostala 4 se povezujemo kao na svic, + on je i ACCESS POINT
+svaki wireless ruter po def ima 5 portova, 1 od njih je internet(wan) port koji sluzi za povezivanje na neku mreznu infrastrukturu, na ostala 4 se povezujemo kao na svic, + on je i ACCESS POINT
+
+[TESTIRATI kako provjeriti da li je wlan povezan preko 'internet' porta na mrezu]
 
 ruter na wireless ruter se povezuje sa 'Internet' portom
 

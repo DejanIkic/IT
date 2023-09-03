@@ -15,17 +15,19 @@ mora se podesiti na svim ruterima
 
 rip je protokol sa generalno sporom konvergencijom, treba vise vremena da se uspostavi tabela rutiranja za sve rutere, 
 AD == 120
-metrika 
+metrika kod ripa je broj rutera koje mora preci da dodje do mreze, npr za situaciju R1 - R2- NETWORK_R2, za R1 ruta ka NETWORK_R2 ima metriku 1
 
 u slucaju da udaljena mreza ima metriku istu za 2 ili vise putanja, sve te putanje ce se nalaziti u jednom zapisu ruting tabele i vrsice se load balancing 
 
-[TESTIRATI moze li RIP i staticke putanje]
+[TESTIRATI moze li RIP i staticke putanje
+        moze li RIP i OSPF kofnigirusan istovremeno]
 
 danas nije moguce upotrebiti verziju 1, 
 diskontinuirana mreza -- to su podmreze koje su nastale iz istog klasnog opsega [npr B], ali nisu direktno povezane nego su razdvojene nekim drugim klasnim opsegom, [npr A], rip 1 ne moze da radi ako imamo diskontinuirane mreze, danas uvijek tako jer imamo svuda VLSM 
 kod ripa se uvijek u komandi #network [adresa] uvijek unosi klasna adresa [npr 172.16.0.0]
 
 apdejti se kor RIP 1 mogu slati samo kao klasne adrese , tu nastaje problem npr ako se udaljene mreze nalaze isti broj hopova od R2, a on dobija istu adresu, tj. adresu klase, onda u ruting tabelu upisuje tu adresu klase sa 2 interfejsa, odnosno radi pomenuti load balancing i nastaje haos
+[TESTIRATI sta ako se mreze razlikuju po metrici, kako ih onda zapisuje u R2]
 
 za 2 mreze sa istom metrikom, kod pinga prolazi svaka druga poruka, a ostale su unreachable 
 
@@ -34,6 +36,8 @@ rip verzija 2 ima prednost jer moze da posalje masku u apdejtu, pa moze da salje
 R1(config-router)# version 2
 ovo nije dovoljno, verzija 2 iz nekih legacy razloga vrsi automatsku sumarizaciju, ondosno isto sto i rip1
 R1(config-router)#no auto-summary
+
+[TESTIRATI prvo konfigurisati sa Rv1 i network, tada u konfiguraciji pisu klasne adrese, kada se ukljuci V2 sta onda pise ?, isto provjeriti u routing tabeli, sta ako ukucamo #network 172.16.0.0 da li onda v1 prepoznaje nakacenu ]
 
 network komande se ne mijenjaju,
 nakon 'no auto-summary' automatski se prepoznaje koja mreza se salje u apdejtu, tj prepoznaje masku
@@ -44,5 +48,6 @@ svaki ruter, svakih 30 sekundi, uzima svoju ruting tabelu i salje je na 'sve rip
 
 nepotrebno, ruter salje i na mreze na kojima nema drugih rutera -- optimizacija > treba je izvrsiti na svim interfejsima gdje su svicevi i racunari  - onemogucava ruter da salje apdejt na lokalnu mrezu
 komanda R1(config-router)#passive-interface fa0/0
+znaci, mreze ce ucestvovati u oglasavanju, ali se na tu mrezu nece slati apdejti
 
 za ipv6 'RIP next generation' 

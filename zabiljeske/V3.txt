@@ -1,5 +1,21 @@
 kad se koristi MLS, po def radi kao svic, pa se portovi koji trebaju funkcionisati kao kod rutera trebaju postaviti na 'MLS(config-if)#no switchport'
 
+int vlan 10:
+Purpose: This command is used to access the configuration interface for a virtual LAN (VLAN) on a Layer 3 switch.
+
+
+L3 svič može da pretvori svoj fizički port u klasičan L3 interfejs sa IP adresom (routed port). To se
+radi pomoću komande:
+MLS(config-if)# no switchport
+
+
+InterVLAN rutiranje se kod L3 svičeva implementira preko SVI interfejsa (zamjena za
+podinterfejse kod rutera). Dat je primjer za VLAN 10. Na isti način treba kreirati SVI i za VLANove
+20, 30 i 99. Adresa dodijeljena na SVI predstavlja default gateway za hostove na tom VLANu.
+MLS(config)# interface vlan 10
+MLS(config-if)# ip address 192.168.10.254 255.255.255.0
+
+
 
 'Trunk configuration differs slightly on a Layer 3 switch. On the Layer 3 switch, the trunking interface needs to be encapsulated with the dot1q protocol, however it is not necessary to specify VLAN numbers as it is when working with a router and subinterfaces.'
 

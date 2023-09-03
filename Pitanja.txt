@@ -13,8 +13,11 @@
 12. ZADATAK IZ CISKA (3 svica, po dva linka izmedju svakoga)
 13. Native VLAN
 
-
-
+14. Koja je razlika izmedju Group i Port-channel kod etherchanela
+15. Sta radi komanda 'MLS(config-if)#no switchport'
+16. Koja je veza izmedju SVI interfejsa kod MLS sa fizickim interfejsom na koji dolazi saobracaj sa lan mreze
+17. Sta ako se razlijue native vlan na ruteru i svicu, ili generalno
+18.
 
 
 TEST:
