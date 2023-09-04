@@ -38,6 +38,27 @@ ovo nije dovoljno, verzija 2 iz nekih legacy razloga vrsi automatsku sumarizacij
 R1(config-router)#no auto-summary
 
 [TESTIRATI prvo konfigurisati sa Rv1 i network, tada u konfiguraciji pisu klasne adrese, kada se ukljuci V2 sta onda pise ?, isto provjeriti u routing tabeli, sta ako ukucamo #network 172.16.0.0 da li onda v1 prepoznaje nakacenu ]
+{
+    podesen rip1 i network
+    u ruting tabeli pisu  
+
+
+    u running conf pise 
+    router rip
+    version 1
+    network 10.0.0.0
+    network 192.168.10.0
+
+    
+    router rip
+    version 2
+    network 10.0.0.0
+    network 192.168.10.0
+    no auto-summary
+    
+
+
+}
 
 network komande se ne mijenjaju,
 nakon 'no auto-summary' automatski se prepoznaje koja mreza se salje u apdejtu, tj prepoznaje masku

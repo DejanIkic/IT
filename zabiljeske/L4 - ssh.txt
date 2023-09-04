@@ -30,6 +30,8 @@ sw1(config-if-range)# shutdown
 ip adresa na swittchu da mu se moze pristupiti [TESTIRATI kako se postavlja]
 kod svica, ip adresa se stavlja na vlan1 a defaultni gejtvej u config#ip default-gateway
 
+[TESTIRATI moze li na svic razlicit username od onog na ruteru]
+
 sw1(config)# ip domain-name security.com 
 sw1(config)# crypto key generate rsa
 
@@ -40,7 +42,7 @@ sw1(config)# crypto key generate rsa
 verifikacija ssh -- u cmd# ssh -l nazivKorisnika adresaNaKojuIdeSSH [TESTIRATI u kojem cmd]
 zatim password 
 
-preduslov za ssh i telnet je da se ukljuci #enable password secret
+preduslov za ssh i telnet je da se ukljuci #enable password secret, uz to da uredjaj ima odgovarajucu IP adresu, ili da 'ima pasword ili korisnika zavisno od toga kako je definisano'
 
 kod svica, ip adresa se stavlja na vlan1 a defaultni gejtvej u config#ip default-gateway
 
@@ -48,3 +50,5 @@ kod svica, ip adresa se stavlja na vlan1 a defaultni gejtvej u config#ip default
 
 RemotePC -> switch :    cmd> ssh -l NETadmin 192.168.1.254
                         password: 
+
+

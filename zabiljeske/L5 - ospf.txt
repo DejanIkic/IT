@@ -7,6 +7,11 @@ R1(config)#router ospf [broj procesa na ovom ospf ruteru,lokalna uloga, omogucav
 R1(config)#router ospf 1
 R1(config-router)#network 162.168.1.0 [wildcard mask] area [oblast kojoj pripada interfejs, po def je backbone oblast, tj == 0]
 
+[TESTIRATI sta je proces ospfa, 'taj broj ne mora da se poklapa na drugim ruterima, ali je dobra praksa']
+
+
+[TESTIRATI ruteri sa razlicitim ospf procesima i razlicitim oblastima]
+
 wildcard maska, inverz obicne maske, kad se u maski obrnu jedinice i nule,
 npr
 255.255.255.0   -- 0.0.0.255
@@ -16,22 +21,28 @@ npr
 
 kad ruteri postanu susjedi, treba da dodje poruka u konzoli
 
+ospf rute se oznacavaju sa O
+
 AD == 110, jaci od ripa
 metrika, racuna se :sabira cost-ove do neke udaljene mreze, uzima u obzir bandwidth, 10^8/bandwith  -- formula
 
 serijski ling -1.5Mb >> cost je 64
 fasteternet - 10^8 Mb >> cost je 1
 
+uvijek se sabira cijena do tog rutera + cijena te mreze
+
+
 loopback interface na nekom ruteru -- logicki/softverski interfejs, u odnosu na fizicki interface ne moze biti u stanju down(ovo je prednost), ospf ga koristi za kreiranje nekih identifikatora, ne zavisi da li je u njega kabl ustekan, moze se simulirati da postoji neka mreza na tom interfejsu, npr simulira vezu ka internetu , nalazi se u tabeli rutiranja kao i svaki drugi interfejs
 
-R1(config)#interface loopback 0
+R1(config)#interface loopback 0 (0 je broj kojim se identifikuje loopback interfejs)
 R1(config-if)#ip address 209.165.200.1 255.255.255.0
+[TESTIRATI kako izgleda loopback interfejs u tabeli rutiranja, da li je to S* zbog loopbacka ili zato sto je staticka]
 
 R1(config)#ip route 0.0.0.0 0.0.0.0 loopback 0 --  def staticka ruta
 
 pomocu loopback rute i ospf, ospf se moze natjerati da spusti def rutu na sve ostale rutere:
 R1(config-if)#default-information originate  -- govori ruteru r1 da posalje info o def ruti svim ostalim ruterima, efekat se provjerava na ostalim ruterima, O*E2 u tabeli rutiranja kod r2, ad. ustanca 110 umjesto 1, metrika 1????
-
+[TESTIRATI koja je AD kod rucno dodane staticke adrese, a ne preko ospf]
 ako se nesto mijenja na ruteru, samo ruteri u istoj oblasti ce vristi ospf izracunavanja 
 
 area se definise na nivou interfejsa, area border router - ruter koji dijeli oblasti, 
@@ -40,15 +51,22 @@ O IA - ia je interarea, oznacava da ruter na kom se gleda tabela nije u istoj ob
 tipovi LSA porukua koje razmjenjuju ospf ruteri? za rutere van svoje oblasti, ruter je dobio informaciju preko LSA tipova 3 i 4, a za eksterne rute preko LSA tipa 5,
 LSA 1,2 IntraArea- unutar svoje oblasti
 
+
+eksterna ruta ka loopback 0 nije ukljucena u ospf domen (to se radi pomocu komande network)
+
+
 [TESTIRATI sta ako se umjesto loopbeka stavi internet na taj port]
 
 sumarizacija kod ospf se vrsi na nivou oblasti, [ npr za loopback 1 sumarna ruta je 172.16.0.0/22 ]:
 r3(config)#router ospf 1
-r3(config)#area 1 range 172.16.0.0 255.255.255.0
+r3(config-router)#area 1 range 172.16.0.0 255.255.255.0
 
-multiaccess mreza - npr 3 rutera preko svica povezani, vise rutera dijele istu mrezu, kod ospf nisu svi medjusobno susjedi, vec se postavlja glavni(designated router DR) ruter i svi su njemu susjedi (skalabilno), postoji i zamjenik, backup designated ruter BDR( da ne bude jedan ruter usko grlo), algoritam biranja(ako nije rucno postavljeno koji ce biti glavni): 1. router-id> bilo kakav 32b podatak u dot dec formatu
-2. najveci loopback interfejs (npr 192.168 > 172.16)
-3. najveci fizicki interfejs (10.10.10.1 < 10.10.10.2 < 10.10.10.3)
+multiaccess mreza - npr 3 rutera preko svica povezani, vise rutera dijele istu mrezu, kod ospf nisu svi medjusobno susjedi, vec se postavlja glavni(designated router DR) ruter i svi su njemu susjedi (skalabilno), postoji i zamjenik, backup designated ruter BDR( da ne bude jedan ruter usko grlo), algoritam biranja(ako nije rucno postavljeno koji ce biti glavni): 
+0. prioritet, po def isti za sve vrijednost 1
+1. router-id>
+  1.1  bilo kakav 32b podatak u dot dec formatu
+  1.2. najveci loopback interfejs (npr 192.168 > 172.16)
+  1.3. najveci fizicki interfejs (10.10.10.1 < 10.10.10.2 < 10.10.10.3)
 
 ako outer 2 ( 10.10.10.3) ima i neki drugi interfejs veci od 1010103, npr 192.168, on ce taj interfejs uzeti za id 
 
@@ -57,5 +75,11 @@ FULL/DROTHER i FULL/BDR ???? [TESTIRATI ]
  
 rucno: postavlja se prioritet na nivou interfejsa : router(config)#int g0/0; (config-if)#ip ospf prioriti <1-255> {1 je defalt }, ova komanda se ne tretira odmah, 'nema taj tzv preemptive karakter', mora se ponovo pokrenuti mreza, najjednostavnije na switchu interfejs range shutdown pa no shutdown
 [TESTIRATI da li se mijenja 'komsiluk' kad se dodaju interfejsi na rutere dalje od svica ]
+[TESTIRATI kad dodamo cetvrti ruter, provjeriti sta se desava u mrezi ako je maska 4. rutera npr \8, kakav je onda RouterId]
 
 kad se doda novi ruter, nije povezan sa FULL/DROTHER, vec 2WAY/DROTHER, sto je i poenta jer se komunikacija odvija preko designated rutera
+
+
+O     1,2
+O IA  3,4
+O*E2  5

@@ -17,7 +17,13 @@
 15. Sta radi komanda 'MLS(config-if)#no switchport'
 16. Koja je veza izmedju SVI interfejsa kod MLS sa fizickim interfejsom na koji dolazi saobracaj sa lan mreze
 17. Sta ako se razlijue native vlan na ruteru i svicu, ili generalno
-18.
+18. kod zadataka sa ripom v1, ako stavimo mrezu klase B na udaljenost 2, tj da ima metriku 2, ona se nece uopste prikazati u riting tabeli?
+19. Na ruteru je koristen line vty 0 4, a na svicu line vty 15
+
+20. Da li port-security radi ista ako nije podesena '#sticky komanda', razlika protect restrict
+21. Cijena linkova ako se koriste gigabitni
+22. Da li su eksterne rute rute koje su prolsijedjene dinamicki sa ruterkoji koristi ospf, kada ukucamo komandu #default information originate
+23. Da li se oblast gleda za linkove ili za rutere, moze li mreza rutera u razlicitim ospf procesima pripadati razlicitoj oblasti
 
 
 TEST:
