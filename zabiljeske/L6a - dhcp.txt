@@ -5,7 +5,7 @@ dhcp pool ima vise adresa, neke se moraju iskljuciti, npr zauzete
 r2(config)#ip dhcp excluded-address 192.168.10.1 192.168.10.10 -- iskljucene sve adrese izmedju 1 i 10
 
 r2(config)#ip dhcp pool R1-LAN
-r2(dhcp-config)#network 192.168.10.0 255.255.255.0 -- ovo je adresa mreze iz koje se dodjeljuju adrese, [TESTIRATI adrese u kojoj se pool nalazi]
+r2(dhcp-config)#network 192.168.10.0 255.255.255.0 -- ovo je adresa mreze(mrezna adresa poola) iz koje se dodjeljuju adrese, [TESTIRATI adrese u kojoj se pool nalazi]
 
 r2(dhcp-config)#default-router 192.168.10.1 -- [CAKA ovdje njije default gateway nego default router]
 r2(dhcp-config)#dns-server 192.168.20.254
@@ -25,3 +25,4 @@ r2(config-if)#ip address dhcp
 r2(config-if)#no shutdown
 
 r2#show ip int brief
+[TESTIRATI moze li helper adress za treci ruter u nizu a ne drugi, tj najblizi svom]

@@ -17,7 +17,7 @@ inside -- outside adrese
 staticko rutiranje u jednoj komandi
 
 r1(config)# ip nat inside source static 172.16.16.1 64.100.50.1
-
+,sta se prevodi i u sta jse prevodi
 dodatno, mora se podesiti na ruteru svi interfejsi koji ucestvuju u natovanju, oni na koje dolaze privatne adrese i one na koje izlaze javne, inside i outside interfejs,
 
 r1(config)#int g0/0
@@ -46,7 +46,7 @@ standardna kontrol lista -- jednostavan zapis kojim se obuhvataju sve adrese sum
 r2(config)# access-list 1 permit 172.16.0.0 [wildcard maska - 0.0.255.255] -- konfigurisanje access liste jedan
 
 sad se obuhvataju javne adrese -- 
-r2(config)# ip nat pool nazivPoola prvaAdresa zadnjaAdresa netmaska adresaMaske
+r2(config)# ip nat pool nazivPoola prvaAdresa zadnjaAdresa netmask adresaMaske
 r2(config)# ip nat pool POOL 209.165.200.229 209.165.200.230 netmask  255.255.255.224 -- ovjde imaju dvije javne adrese, .29 i .30
 
 povezivanje access liste i poola --
@@ -67,7 +67,7 @@ r1(config)# ip nat inside source list 1 pool ANY_POOL_NAME overload -- govori ru
 
 ako se privatne adrese mapiraju u jednu javnu, tj javnu adresu rutera, onda ne treba pool izlaznih adresa, vec samo access lista privatnih i komanda: 
 r2(config)#ip nat inside source list 2 interface s0/1/1 overload 
-
+[TESTIRATI moze li prethidno bez overlodada, ima li smisla i za sta]
 port nije kao obicni port vec vise je identifikator po kojem ce ruter razlikovati kome treba poslati odgovor 
 
 

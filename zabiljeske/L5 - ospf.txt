@@ -41,7 +41,7 @@ R1(config-if)#ip address 209.165.200.1 255.255.255.0
 R1(config)#ip route 0.0.0.0 0.0.0.0 loopback 0 --  def staticka ruta
 
 pomocu loopback rute i ospf, ospf se moze natjerati da spusti def rutu na sve ostale rutere:
-R1(config-if)#default-information originate  -- govori ruteru r1 da posalje info o def ruti svim ostalim ruterima, efekat se provjerava na ostalim ruterima, O*E2 u tabeli rutiranja kod r2, ad. ustanca 110 umjesto 1, metrika 1????
+R1(config-router)#default-information originate  -- govori ruteru r1 da posalje info o def ruti svim ostalim ruterima, efekat se provjerava na ostalim ruterima, O*E2 u tabeli rutiranja kod r2, ad. ustanca 110 umjesto 1, metrika 1????
 [TESTIRATI koja je AD kod rucno dodane staticke adrese, a ne preko ospf]
 ako se nesto mijenja na ruteru, samo ruteri u istoj oblasti ce vristi ospf izracunavanja 
 
@@ -73,7 +73,7 @@ ako outer 2 ( 10.10.10.3) ima i neki drugi interfejs veci od 1010103, npr 192.16
 router# show ip ospf neighbor -- prikaz susjednih rutera, bitna kolona state, FULL - puno susjedstvo sa stranim ruterom 
 FULL/DROTHER i FULL/BDR ???? [TESTIRATI ]
  
-rucno: postavlja se prioritet na nivou interfejsa : router(config)#int g0/0; (config-if)#ip ospf prioriti <1-255> {1 je defalt }, ova komanda se ne tretira odmah, 'nema taj tzv preemptive karakter', mora se ponovo pokrenuti mreza, najjednostavnije na switchu interfejs range shutdown pa no shutdown
+rucno: postavlja se prioritet na nivou interfejsa : router(config)#int g0/0; (config-if)#ip ospf priority <1-255> {1 je defalt }, ova komanda se ne tretira odmah, 'nema taj tzv preemptive karakter', mora se ponovo pokrenuti mreza, najjednostavnije na switchu interfejs range shutdown pa no shutdown
 [TESTIRATI da li se mijenja 'komsiluk' kad se dodaju interfejsi na rutere dalje od svica ]
 [TESTIRATI kad dodamo cetvrti ruter, provjeriti sta se desava u mrezi ako je maska 4. rutera npr \8, kakav je onda RouterId]
 
