@@ -1,9 +1,9 @@
 1. U zadacima sa svicevima, u tabelama stoje podaci o broju portova, da li broj portova utice  i na sta?
 2. U istom zadatku, kako se moze simulirati MAC adresa svica u ciscu, da li je to adresa VLANa ili nekog od interfejsa?
 3. U slucaju petlje izmedju dva linka, kako se bira koji port ce biti blokiran na strani ne-root bridza, vezano za indekse portova [PROVJERI]
-4. spanning-tree vlan 1 root secundary -- da li stavlja da svic necebiti root bridz ili?
+        4. spanning-tree vlan 1 root secundary -- da li stavlja da svic necebiti root bridz ili?
 5. sta tacno znaci alternating uloga u portu
-6. sta je bloking port status
+     6. sta je bloking port status
 7. kad se koristi zamjenik root bridza
 
 8. prioritet + vlan u svicu, da li se uvijek sabira sa 1
@@ -15,7 +15,7 @@
 
 14. Koja je razlika izmedju Group i Port-channel kod etherchanela
 15. Sta radi komanda 'MLS(config-if)#no switchport'
-16. Koja je veza izmedju SVI interfejsa kod MLS sa fizickim interfejsom na koji dolazi saobracaj sa lan mreze
+    16. Koja je veza izmedju SVI interfejsa kod MLS sa fizickim interfejsom na koji dolazi saobracaj sa lan mreze
 17. Sta ako se razlijue native vlan na ruteru i svicu, ili generalno
 18. kod zadataka sa ripom v1, ako stavimo mrezu klase B na udaljenost 2, tj da ima metriku 2, ona se nece uopste prikazati u riting tabeli?
 19. Na ruteru je koristen line vty 0 4, a na svicu line vty 15
@@ -24,6 +24,7 @@
 21. Cijena linkova ako se koriste gigabitni
 22. Da li su eksterne rute rute koje su prolsijedjene dinamicki sa ruterkoji koristi ospf, kada ukucamo komandu #default information originate
 23. Da li se oblast gleda za linkove ili za rutere, moze li mreza rutera u razlicitim ospf procesima pripadati razlicitoj oblasti
+24. Kod ospf, sta radimo ako imamo gigabitne linkov
 
 
 TEST:
